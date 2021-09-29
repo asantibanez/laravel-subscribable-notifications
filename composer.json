@@ -48,7 +48,7 @@
                 "Asantibanez\\LaravelSubscribableNotifications\\LaravelSubscribableNotificationsServiceProvider"
             ],
             "aliases": {
-                "LaravelSubscribableNotifications": "Asantibanez\\LaravelSubscribableNotifications\\LaravelSubscribableNotificationsFacade"
+                "LaravelSubscribableNotifications": "NotificationSubscriptionManager"
             }
         }
     }

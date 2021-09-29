@@ -15,10 +15,6 @@ class NotificationSubscription extends Model
 
     protected $guarded = [];
 
-    protected $casts = [
-        'channels' => 'array',
-    ];
-
     public function user()
     {
         return $this->belongsTo(config('laravel-subscribable-notifications.user_model'));

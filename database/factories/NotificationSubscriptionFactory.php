@@ -19,7 +19,6 @@ class NotificationSubscriptionFactory extends Factory
     {
         return [
             'type' => $this->faker->word,
-            'channels' => '*',
         ];
     }
 

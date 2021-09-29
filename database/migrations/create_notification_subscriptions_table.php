@@ -17,7 +17,6 @@ class CreateNotificationSubscriptionsTable extends Migration
             $table->id();
             $table->string('type');
             $table->unsignedInteger('user_id');
-            $table->json('channels');
             $table->timestamps();
 
             $table->unique(['type', 'user_id']);
