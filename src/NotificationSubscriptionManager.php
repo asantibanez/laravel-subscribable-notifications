@@ -30,4 +30,13 @@ class NotificationSubscriptionManager
             ])
             ->delete();
     }
+
+    public function unsubscribeAll($user)
+    {
+        NotificationSubscription::query()
+            ->where([
+                'user_id' => $user->id,
+            ])
+            ->delete();
+    }
 }

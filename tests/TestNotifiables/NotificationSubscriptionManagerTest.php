@@ -3,6 +3,7 @@
 namespace Asantibanez\LaravelSubscribableNotifications\Tests\Unit;
 
 use Asantibanez\LaravelSubscribableNotifications\Facades\NotificationSubscriptionManager;
+use Asantibanez\LaravelSubscribableNotifications\Models\NotificationSubscription;
 use Asantibanez\LaravelSubscribableNotifications\Tests\TestCase;
 use Asantibanez\LaravelSubscribableNotifications\Tests\TestModels\User;
 use Asantibanez\LaravelSubscribableNotifications\Tests\TestNotifiables\SalesOrderApprovedNotification;
@@ -43,6 +44,24 @@ class NotificationSubscriptionManagerTest extends TestCase
 
         //Act
         NotificationSubscriptionManager::unsubscribe($user, SalesOrderApprovedNotification::class);
+
+        //Assert
+        $this->assertEquals(0, $user->notificationSubscriptions()->count());
+    }
+
+    /** @test */
+    public function should_unsubscribe_user_to_all_notifications()
+    {
+        //Arrange
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        NotificationSubscription::factory()->times(5)->forUser($user)->create();
+
+        $this->assertEquals(5, $user->notificationSubscriptions()->count());
+
+        //Act
+        NotificationSubscriptionManager::unsubscribeAll($user);
 
         //Assert
         $this->assertEquals(0, $user->notificationSubscriptions()->count());
