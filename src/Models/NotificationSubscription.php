@@ -3,6 +3,7 @@
 namespace Asantibanez\LaravelSubscribableNotifications\Models;
 
 use Asantibanez\LaravelSubscribableNotifications\Database\Factories\NotificationSubscriptionFactory;
+use Asantibanez\LaravelSubscribableNotifications\Facades\NotificationSubscriptionManager;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,7 +18,7 @@ class NotificationSubscription extends Model
 
     public function user()
     {
-        return $this->belongsTo(config('laravel-subscribable-notifications.user_model'));
+        return $this->belongsTo(NotificationSubscriptionManager::userModel());
     }
 
     public function scopeForType($query, $type)

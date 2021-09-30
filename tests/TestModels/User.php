@@ -3,6 +3,7 @@
 
 namespace Asantibanez\LaravelSubscribableNotifications\Tests\TestModels;
 
+use Asantibanez\LaravelSubscribableNotifications\Contracts\NotificationSubscriber;
 use Asantibanez\LaravelSubscribableNotifications\Tests\database\factories\UserFactory;
 use Asantibanez\LaravelSubscribableNotifications\Traits\HasNotificationSubscriptions;
 use Illuminate\Auth\Authenticatable;

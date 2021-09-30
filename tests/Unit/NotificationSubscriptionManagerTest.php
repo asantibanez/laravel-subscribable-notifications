@@ -50,7 +50,7 @@ class NotificationSubscriptionManagerTest extends TestCase
     }
 
     /** @test */
-    public function should_unsubscribe_user_to_all_notifications()
+    public function should_unsubscribe_user_from_all_notifications()
     {
         //Arrange
         /** @var User $user */
@@ -61,7 +61,7 @@ class NotificationSubscriptionManagerTest extends TestCase
         $this->assertEquals(5, $user->notificationSubscriptions()->count());
 
         //Act
-        NotificationSubscriptionManager::unsubscribeAll($user);
+        NotificationSubscriptionManager::unsubscribeFromAll($user);
 
         //Assert
         $this->assertEquals(0, $user->notificationSubscriptions()->count());
@@ -72,9 +72,7 @@ class NotificationSubscriptionManagerTest extends TestCase
     {
         //Arrange
         $notifications = [
-            $this->faker->word,
-            $this->faker->word,
-            $this->faker->word,
+            SalesOrderApprovedNotification::class,
         ];
 
         config(['laravel-subscribable-notifications.subscribable_notifications' => $notifications]);

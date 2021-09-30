@@ -20,6 +20,9 @@ class CreateNotificationSubscriptionsTable extends Migration
             $table->timestamps();
 
             $table->unique(['type', 'user_id']);
+
+            $table->index(['user_id']);
+            $table->index(['type']);
         });
     }
 

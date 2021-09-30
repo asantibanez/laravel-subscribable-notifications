@@ -9,15 +9,20 @@ use Illuminate\Support\Facades\Notification;
 
 trait DispatchesToSubscribers
 {
-    public abstract static function type(): string;
-
     public static function dispatch()
     {
-        $users = NotificationSubscription::query()
-            ->forType(static::type())
-            ->get()
-            ->map(fn (NotificationSubscription $notificationSubscription) => $notificationSubscription->user);
+        Notification::send(
+            static::subscribers(),
+            new static(...func_get_args())
+        );
+    }
 
-        Notification::send($users, new static(...func_get_args()));
+    public static function subscribers()
+    {
+        return NotificationSubscription::query()
+            ->forType(static::subscribableNotificationType())
+            ->get()
+            ->map->user
+            ->unique();
     }
 }

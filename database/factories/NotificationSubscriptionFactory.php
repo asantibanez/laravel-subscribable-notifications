@@ -18,7 +18,7 @@ class NotificationSubscriptionFactory extends Factory
     public function definition()
     {
         return [
-            'type' => $this->faker->word,
+            'type' => $this->faker->domainWord,
         ];
     }
 

@@ -29,7 +29,7 @@ class DispatchesNotifiableTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create();
 
-        $type = SalesOrderApprovedNotification::type();
+        $type = SalesOrderApprovedNotification::subscribableNotificationType();
 
         NotificationSubscription::factory()
             ->forUser($user)
@@ -39,10 +39,15 @@ class DispatchesNotifiableTest extends TestCase
         $this->assertEquals(1, $user->notificationSubscriptions()->forType($type)->count());
 
         //Act
-        SalesOrderApprovedNotification::dispatch();
+        SalesOrderApprovedNotification::dispatch($payload = [1, 2, 3]);
 
         //Assert
         Notification::assertTimesSent(1, SalesOrderApprovedNotification::class);
+
+        Notification::assertSentTo($user, SalesOrderApprovedNotification::class, function ($notification) use ($payload) {
+            $this->assertEquals($payload, $notification->payload);
+            return true;
+        });
     }
 
     /** @test */
@@ -52,12 +57,12 @@ class DispatchesNotifiableTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create();
 
-        $type = SalesOrderApprovedNotification::type();
+        $type = SalesOrderApprovedNotification::subscribableNotificationType();
 
         $this->assertEquals(0, $user->notificationSubscriptions()->forType($type)->count());
 
         //Act
-        SalesOrderApprovedNotification::dispatch();
+        SalesOrderApprovedNotification::dispatch([]);
 
         //Assert
         Notification::assertNothingSent();
