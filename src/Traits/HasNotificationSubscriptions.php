@@ -17,4 +17,11 @@ trait HasNotificationSubscriptions
     {
         return $this->hasMany(NotificationSubscription::class, 'user_id');
     }
+
+    public function isSubscribedToNotification($type): bool
+    {
+        return $this->notificationSubscriptions()
+            ->forType($type)
+            ->exists();
+    }
 }
