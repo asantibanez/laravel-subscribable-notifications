@@ -22,7 +22,9 @@ trait DispatchesToSubscribers
         return NotificationSubscription::query()
             ->forType(static::subscribableNotificationType())
             ->get()
-            ->map->user
+            ->map(fn (NotificationSubscription $notificationSubscription) => (
+                $notificationSubscription->user
+            ))
             ->unique();
     }
 }
