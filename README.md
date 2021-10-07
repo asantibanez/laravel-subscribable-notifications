@@ -10,10 +10,13 @@ and dispatch notifications to your users easily.
 
 ### Motivation
 
+Recently I've been developing back-office kind of apps where a group of users need to be notified via email for a particular 
+event or scenario in the system. These users were being hardcoded in the app and sometimes they needed to subscribe or be 
+removed from certain emails, depending on the job they were doing at the company. Since their emails were hardcoded, it was
+tricky to update the "subscribers" list to each mailable that was sent by the application. With that idea in mind, this
+package was created to allow configuring users to each mailable they need to receive.
 
-
-
-## Installation
+### Installation
 
 You can install the package via composer:
 
@@ -26,10 +29,9 @@ Afterwards, export both the `config` and `migrations` by using the `php artisan 
 Once the `laravel-subscribable-notifications.php` config file is exported, make sure you define your `User` model and
 your `subscribable_notifications` (more on this below). Only the notifications you configure will be available for subscription. 
 
-
 ### Usage
 
-Using Laravel notifications systems, you normally dispatch notifications using the `Notification` facade or via the `User`
+Using Laravel notifications system, you normally dispatch notifications using the `Notification` facade or via the `User`
 model `notify()` method when implementing the `Notifiable` trait.
 
 ```php
@@ -50,10 +52,34 @@ notification will receive it.
 OrderShipped::dispatch($order);
 ```
 
-
 ### Preparing your Notifications
 
-WIP
+Notifications must implement the `SubscribableNotification` interface which will require to implement the following methods:
+- dispatch
+- subscribers
+- subscribableNotificationType
+
+For these, add the `DispatchesToSubscriber` trait to your notification which will cover `dispatch` and `subscribers`. Lastly,
+implement `subscribableNotificationType` by providing a string that identifies your notification. This value will be saved
+in the database for your users subscriptions.
+
+```php
+class SalesOrderApprovedNotification extends Notification implements SubscribableNotification
+{
+    use DispatchesToSubscribers;
+
+    public static function subscribableNotificationType(): string
+    {
+        return 'sales-order.approved';
+    }
+    
+    // notification implementation here
+}
+```
+
+You must also add your notification to the `subscribable_notifications` array inside `laravel-subscribable-notifications` config.
+Registering your notification here will allow the package to know which notifications can be dispatched throughout this 
+interface.
 
 ### Subscribing/Unsubscribing Users
 
@@ -63,6 +89,14 @@ Using the `NotificationSubscriptionManager` facade, you can subscribe and unsubs
 `subscribe` and `unsubscribe` methods respectively. There's also a `unsubscribeFromAll` method to remove all subscription
 from a user.
 
+>Note: Your `User` model can implement the `HasNotificationSubscriptions` trait to get helper methods in order to know
+> what subscriptions each user has been subscribed to.
+
+### Utilities
+
+The package register a new `subscribable-notifications:manage` command which you can run in your terminal and interact
+with the `notification_subscriptions` table. The command allows you to list/add/remove users from notifications you've
+defined in the `laravel-subscribable-notifications` config file.
 
 ### Testing
 
