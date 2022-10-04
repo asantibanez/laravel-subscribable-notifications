@@ -2,6 +2,7 @@
 
 namespace Asantibanez\LaravelSubscribableNotifications\Tests\Feature;
 
+use Asantibanez\LaravelSubscribableNotifications\Facades\NotificationSubscriptionManager;
 use Asantibanez\LaravelSubscribableNotifications\Models\NotificationSubscription;
 use Asantibanez\LaravelSubscribableNotifications\Tests\TestCase;
 use Asantibanez\LaravelSubscribableNotifications\Tests\TestModels\User;
@@ -66,5 +67,26 @@ class DispatchesNotifiableTest extends TestCase
 
         //Assert
         Notification::assertNothingSent();
+    }
+
+    /** @test */
+    public function should_not_dispatch_notifiable_for_not_found_users()
+    {
+        //Arrange
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $deletedUser = User::factory()->create();
+
+        NotificationSubscriptionManager::subscribe($user, SalesOrderApprovedNotification::class);
+        NotificationSubscriptionManager::subscribe($deletedUser, SalesOrderApprovedNotification::class);
+
+        $deletedUser->delete();
+
+        //Act
+        SalesOrderApprovedNotification::dispatch();
+
+        //Assert
+        Notification::assertTimesSent(1, SalesOrderApprovedNotification::class);
     }
 }

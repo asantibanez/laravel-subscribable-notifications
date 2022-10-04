@@ -15,7 +15,7 @@ class SalesOrderApprovedNotification extends Notification implements Subscribabl
 
     public $payload;
 
-    public function __construct($payload)
+    public function __construct($payload = null)
     {
         $this->payload = $payload;
     }

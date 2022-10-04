@@ -25,6 +25,7 @@ trait DispatchesToSubscribers
             ->map(fn (NotificationSubscription $notificationSubscription) => (
                 $notificationSubscription->user
             ))
+            ->filter()
             ->unique();
     }
 }
