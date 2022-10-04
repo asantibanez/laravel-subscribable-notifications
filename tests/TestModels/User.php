@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @method static UserFactory factory(...$parameters)
+ */
 class User extends Model implements AuthorizableContract, AuthenticatableContract
 {
     use Authorizable;
