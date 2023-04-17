@@ -43,7 +43,7 @@ class DispatchesNotifiableTest extends TestCase
         SalesOrderApprovedNotification::dispatch($payload = [1, 2, 3]);
 
         //Assert
-        Notification::assertTimesSent(1, SalesOrderApprovedNotification::class);
+        Notification::assertSentTimes(SalesOrderApprovedNotification::class, 1);
 
         Notification::assertSentTo($user, SalesOrderApprovedNotification::class, function ($notification) use ($payload) {
             $this->assertEquals($payload, $notification->payload);
@@ -87,6 +87,6 @@ class DispatchesNotifiableTest extends TestCase
         SalesOrderApprovedNotification::dispatch();
 
         //Assert
-        Notification::assertTimesSent(1, SalesOrderApprovedNotification::class);
+        Notification::assertSentTimes(SalesOrderApprovedNotification::class, 1);
     }
 }
